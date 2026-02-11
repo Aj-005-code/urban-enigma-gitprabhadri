@@ -3,7 +3,16 @@ pipeline{
     stages{
         stage('Run docker'){
             steps{
-                bat 'docker build -t ajay .'
+                script{
+                    try{
+                        bat 'docker build -t ajay .'
+                    }catch(err){
+                        echo "build failed"
+                        CurrentBuild.result='FAILURE'
+                        error "docker failed to build"
+                    }
+                }
+                
             }
         }
         stage('Run'){
